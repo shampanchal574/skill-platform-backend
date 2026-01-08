@@ -1,10 +1,16 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-# Create app FIRST
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(bind=engine)
+
 app = FastAPI()
 
-# Add middleware AFTER app exists
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,7 +21,7 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    return {"message": "Skill Platform Backend Running"}
+    return {"message": "Backend + DB connected"}
 
 @app.get("/health")
 def health():
